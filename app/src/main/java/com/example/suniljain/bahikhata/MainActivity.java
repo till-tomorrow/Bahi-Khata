@@ -66,14 +66,16 @@ public class MainActivity extends AppCompatActivity {
 
                         if (sharedpreferences.contains(name)) {
                             amount = amount + sharedpreferences.getInt(name, 0);
-                            editor.putInt(name, amount);
+                            editor.putString(name, name);
+                            editor.putInt(name + amount, amount);
                             editor.apply();
 
                             //getSharedPreferences("sharedprefs", Context.MODE_PRIVATE).edit().putInt(name, amount + Integer.parseInt(sharedpreferences.getString(name, ""))).apply();
 
                         }
                         else{
-                            editor.putInt(name, amount);
+                            editor.putString(name, name);
+                            editor.putInt(name + amount, amount);
                             editor.commit();
                         }
 
@@ -92,6 +94,8 @@ public class MainActivity extends AppCompatActivity {
                 });
 
                 builder.show();
+
+                //TODO: graphs showing the amount borrowed and amount lend
             }
         });
     }
