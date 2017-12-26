@@ -17,10 +17,16 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.ViewGroup;
 import android.widget.EditText;
+import android.widget.ListView;
 import android.widget.Toast;
+
+import java.lang.reflect.Array;
+import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
 
+    ListView listView;
+    static int index = 0;
     SharedPreferences sharedpreferences;
     EditText etAmount;
     String name;
@@ -32,6 +38,10 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
+        //TODO: ArrayList is not  a permanent way to store key, value pairs. Extract everything from sharedpreferences somehow.
+        final ArrayList<String> namesArrayList = new ArrayList<>();
+        final ArrayList<Integer> amountsArrayList = new ArrayList<>();
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
 
@@ -72,11 +82,17 @@ public class MainActivity extends AppCompatActivity {
 
                             //getSharedPreferences("sharedprefs", Context.MODE_PRIVATE).edit().putInt(name, amount + Integer.parseInt(sharedpreferences.getString(name, ""))).apply();
 
+
+                            int indexToBeModified = namesArrayList.indexOf(name);
+                            amountsArrayList.remove(indexToBeModified);
+                            amountsArrayList.add(indexToBeModified, amount);
                         }
                         else{
                             editor.putString(name, name);
                             editor.putInt(name + amount, amount);
                             editor.commit();
+                            namesArrayList.add(index + 1, name);
+                            amountsArrayList.add(index, amount);            //because index is static
                         }
 
 //                        EditTextPreference myPrefText = (EditTextPreference) super.findPreference(name);
