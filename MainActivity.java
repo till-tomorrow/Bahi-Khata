@@ -25,6 +25,7 @@ public class MainActivity extends AppCompatActivity {
     EditText etAmount;
     String name;
     int amount;                         //TODO: currently, only integers are accepted....MODIFICATION NEEDED
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -48,7 +49,7 @@ public class MainActivity extends AppCompatActivity {
                 // Set up the input
                 final EditText etName = (EditText) viewInflated.findViewById(R.id.etName);
                 etAmount = (EditText) viewInflated.findViewById(R.id.etAmount);
-                // Specify the type of input expected; this, for example, sets the input as a password, and will mask the text
+
                 builder.setView(viewInflated);
 
                 // Set up the buttons
@@ -59,13 +60,13 @@ public class MainActivity extends AppCompatActivity {
                         amount = Integer.parseInt(etAmount.getText().toString());
                         SharedPreferences.Editor editor = sharedpreferences.edit();
 
-                        //if that person already exists, then modify his/her record in the map instead of adding im/her again
+                        //if that person already exists, then modify his/her record in the map instead of adding him/her again
                         //TODO: this has to be MODIFIED because option for value incrementation/decrementation should be there with the amount on list
                         //TODO: Auto-complete of name feature has to be added
                         //TODO: Fix the issue ---- app crashes if name already exists in the shared preferences
 
                         if (sharedpreferences.contains(name)) {
-                            amount = amount + Integer.parseInt(sharedpreferences.getString(name, ""));
+                            amount = amount + sharedpreferences.getInt(name, 0);
                             editor.putInt(name, amount);
                             editor.apply();
 
