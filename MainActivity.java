@@ -5,8 +5,9 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.EditTextPreference;
+import android.preference.PreferenceManager;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -21,6 +22,7 @@ import android.widget.Toast;
 public class MainActivity extends AppCompatActivity {
 
     SharedPreferences sharedpreferences;
+    EditText etAmount;
     String name;
     int amount;                         //TODO: currently, only integers are accepted....MODIFICATION NEEDED
     @Override
@@ -33,6 +35,8 @@ public class MainActivity extends AppCompatActivity {
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
 
         sharedpreferences = getSharedPreferences("sharedprefs", Context.MODE_PRIVATE);
+        //sharedpreferences = PreferenceManager.getDefaultSharedPreferences(this);
+
 
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -43,7 +47,7 @@ public class MainActivity extends AppCompatActivity {
                 View viewInflated = LayoutInflater.from(MainActivity.this).inflate(R.layout.add_new_member_alert, (ViewGroup) findViewById(android.R.id.content), false);
                 // Set up the input
                 final EditText etName = (EditText) viewInflated.findViewById(R.id.etName);
-                final EditText etAmount = (EditText) viewInflated.findViewById(R.id.etAmount);
+                etAmount = (EditText) viewInflated.findViewById(R.id.etAmount);
                 // Specify the type of input expected; this, for example, sets the input as a password, and will mask the text
                 builder.setView(viewInflated);
 
@@ -51,25 +55,33 @@ public class MainActivity extends AppCompatActivity {
                 builder.setPositiveButton("Add", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        dialog.dismiss();                       //work is done so dismiss
                         name = etName.getText().toString();
                         amount = Integer.parseInt(etAmount.getText().toString());
-                        //shared preferences commit
                         SharedPreferences.Editor editor = sharedpreferences.edit();
 
                         //if that person already exists, then modify his/her record in the map instead of adding im/her again
                         //TODO: this has to be MODIFIED because option for value incrementation/decrementation should be there with the amount on list
                         //TODO: Auto-complete of name feature has to be added
-                        //TODO: Fix the issue ---- app crashes if name alrady exists in the shared preferences
+                        //TODO: Fix the issue ---- app crashes if name already exists in the shared preferences
 
                         if (sharedpreferences.contains(name)) {
-                            amount += Integer.parseInt(sharedpreferences.getString(name + "Amount", ""));
-                        }
-                        editor.putString(name, name);
-                        editor.putInt(name + "Amount", amount);
-                        editor.commit();
+                            amount = amount + Integer.parseInt(sharedpreferences.getString(name, ""));
+                            editor.putInt(name, amount);
+                            editor.apply();
 
-                        Toast.makeText(MainActivity.this, "Person added!" + "Amount is " + amount, Toast.LENGTH_SHORT).show();
+                            //getSharedPreferences("sharedprefs", Context.MODE_PRIVATE).edit().putInt(name, amount + Integer.parseInt(sharedpreferences.getString(name, ""))).apply();
+
+                        }
+                        else{
+                            editor.putInt(name, amount);
+                            editor.commit();
+                        }
+
+//                        EditTextPreference myPrefText = (EditTextPreference) super.findPreference(name);
+//                        myPrefText.setText(amount + "");
+                        Toast.makeText(MainActivity.this, name + " added!!" + "  Amount is " + amount, Toast.LENGTH_SHORT).show();
+
+                        dialog.dismiss();                       //work is done so dismiss
                     }
                 });
                 builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
