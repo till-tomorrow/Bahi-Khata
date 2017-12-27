@@ -22,6 +22,7 @@ import android.widget.Toast;
 
 import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.Map;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -29,8 +30,8 @@ public class MainActivity extends AppCompatActivity {
     static int no_of_persons = 0;
     SharedPreferences sharedpreferences;
     EditText etAmount;
-    String name = null;
-    int amount = 0;                         //TODO: currently, only integers are accepted....MODIFICATION NEEDED
+    String name;
+    int amount;                         //TODO: currently, only integers are accepted....MODIFICATION NEEDED
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -79,10 +80,25 @@ public class MainActivity extends AppCompatActivity {
                         //TODO: Auto-complete of name feature has to be added
 
                         if (sharedpreferences.contains(name)) {
-//                            editor.putString(name, name);
-                            editor.putInt(name + amount, amount + sharedpreferences.getInt(name, 0));
+//                            editor.putInt(name + amount, amount + sharedpreferences.getInt(name, 0));
+
+                            int prevAmount = 0;
+                            Map<String, ?> allEntries = sharedpreferences.getAll();
+                            for (Map.Entry<String, ?> entry : allEntries.entrySet()){
+                                if(entry.getValue().equals(name)){
+                                    editor.remove(entry.getKey());
+                                    prevAmount = sharedpreferences.getInt("amount" + entry.getKey(), 0);
+                                    editor.remove("amount" + entry.getKey());
+                                }
+                            }
                             editor.apply();
 
+                            no_of_persons++;
+
+                            editor.putString(no_of_persons + "", name);
+                            amount = prevAmount + amount;
+                            editor.putInt("amount" + no_of_persons + "", amount);
+                            editor.commit();
                             //getSharedPreferences("sharedprefs", Context.MODE_PRIVATE).edit().putInt(name, amount + Integer.parseInt(sharedpreferences.getString(name, ""))).apply();
 
 
@@ -93,8 +109,8 @@ public class MainActivity extends AppCompatActivity {
                         else{
                             no_of_persons++;
 
-                            editor.putString(name, name);
-                            editor.putInt(name + amount, amount);
+                            editor.putString(no_of_persons + "", name);
+                            editor.putInt("amount" + no_of_persons + "", amount);
                             editor.commit();
                             /*namesArrayList.add(index + 1, name);
                             amountsArrayList.add(index, amount);*/            //because index is static
