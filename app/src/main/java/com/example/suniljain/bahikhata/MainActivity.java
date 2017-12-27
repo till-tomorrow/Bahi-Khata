@@ -26,11 +26,11 @@ import java.util.ArrayList;
 public class MainActivity extends AppCompatActivity {
 
     ListView listView;
-    static int index = 0;
+    static int no_of_persons = 0;
     SharedPreferences sharedpreferences;
     EditText etAmount;
-    String name;
-    int amount;                         //TODO: currently, only integers are accepted....MODIFICATION NEEDED
+    static String name = null;
+    static int amount = 0;                         //TODO: currently, only integers are accepted....MODIFICATION NEEDED
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,10 +40,13 @@ public class MainActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
 
         //TODO: ArrayList is not  a permanent way to store key, value pairs. Extract everything from sharedpreferences somehow.
-        final ArrayList<String> namesArrayList = new ArrayList<>();
-        final ArrayList<Integer> amountsArrayList = new ArrayList<>();
+        /*final ArrayList<String> namesArrayList = new ArrayList<>();
+        final ArrayList<Integer> amountsArrayList = new ArrayList<>();*/
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+
+        listView = (ListView) findViewById(R.id.listView);
+        final CustomAdapter customAdapter = new CustomAdapter(getApplicationContext());
 
         sharedpreferences = getSharedPreferences("sharedprefs", Context.MODE_PRIVATE);
         //sharedpreferences = PreferenceManager.getDefaultSharedPreferences(this);
@@ -76,23 +79,26 @@ public class MainActivity extends AppCompatActivity {
 
                         if (sharedpreferences.contains(name)) {
                             amount = amount + sharedpreferences.getInt(name, 0);
-                            editor.putString(name, name);
-                            editor.putInt(name + amount, amount);
+                            editor.putString(no_of_persons + "", name);
+                            editor.putInt(name, amount);
                             editor.apply();
 
                             //getSharedPreferences("sharedprefs", Context.MODE_PRIVATE).edit().putInt(name, amount + Integer.parseInt(sharedpreferences.getString(name, ""))).apply();
 
 
-                            int indexToBeModified = namesArrayList.indexOf(name);
+/*                            int indexToBeModified = namesArrayList.indexOf(name);
                             amountsArrayList.remove(indexToBeModified);
-                            amountsArrayList.add(indexToBeModified, amount);
+                            amountsArrayList.add(indexToBeModified, amount);*/
                         }
                         else{
-                            editor.putString(name, name);
-                            editor.putInt(name + amount, amount);
+                            editor.putString(no_of_persons + "", name);
+                            editor.putInt(name, amount);
                             editor.commit();
-                            namesArrayList.add(index + 1, name);
-                            amountsArrayList.add(index, amount);            //because index is static
+                            /*namesArrayList.add(index + 1, name);
+                            amountsArrayList.add(index, amount);*/            //because index is static
+
+                            no_of_persons++;
+                            listView.setAdapter(customAdapter);
                         }
 
 //                        EditTextPreference myPrefText = (EditTextPreference) super.findPreference(name);
