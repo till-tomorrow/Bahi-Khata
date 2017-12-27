@@ -2,6 +2,7 @@ package com.example.suniljain.bahikhata;
 
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -38,10 +39,22 @@ public class CustomAdapter extends BaseAdapter{
         convertView = layoutInflater.inflate(R.layout.listview_list_item, null);
         TextView tvName = (TextView) convertView.findViewById(R.id.tvName);
         TextView tvAmount = (TextView) convertView.findViewById(R.id.tvAmount);
-        //something................................
-        //
-        //
+
+        SharedPreferences sharedPreferences = context.getSharedPreferences("sharedprefs", Context.MODE_PRIVATE);
+
+        if(sharedPreferences.getString(position + "", null) != null){
+            tvName.setText(sharedPreferences.getString(position + "", null));
+        }
+
+        if(sharedPreferences.getInt("amount" + position + "", 0) != 0){
+            tvAmount.setText(sharedPreferences.getInt("amount" + position + "", 0));
+        }
 
         return convertView;
     }
+
+   /* private void getMySharedPreference(){
+
+        return ;
+    }*/
 }

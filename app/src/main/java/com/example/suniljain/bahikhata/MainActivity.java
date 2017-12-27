@@ -46,9 +46,9 @@ public class MainActivity extends AppCompatActivity {
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
 
-//        listView = (ListView) findViewById(R.id.listView);
-//        CustomAdapter customAdapter = new CustomAdapter(getApplicationContext());
-//        listView.setAdapter(customAdapter);
+        listView = (ListView) findViewById(R.id.listView);
+        CustomAdapter customAdapter = new CustomAdapter(getApplicationContext());
+        listView.setAdapter(customAdapter);
 
         sharedpreferences = getSharedPreferences("sharedprefs", Context.MODE_PRIVATE);
         //sharedpreferences = PreferenceManager.getDefaultSharedPreferences(this);
