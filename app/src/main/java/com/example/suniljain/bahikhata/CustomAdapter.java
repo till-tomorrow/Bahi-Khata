@@ -2,6 +2,7 @@ package com.example.suniljain.bahikhata;
 
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -37,8 +38,10 @@ public class CustomAdapter extends BaseAdapter{
         convertView = layoutInflater.inflate(R.layout.listview_list_item, null);
         TextView tvName = (TextView) convertView.findViewById(R.id.tvName);
         TextView tvAmount = (TextView) convertView.findViewById(R.id.tvAmount);
-        tvName.setText(MainActivity.name);
-        tvAmount.setText(MainActivity.amount);
+        //something................................
+        //
+        //
+
         return convertView;
     }
 }

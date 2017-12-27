@@ -29,8 +29,8 @@ public class MainActivity extends AppCompatActivity {
     static int no_of_persons = 0;
     SharedPreferences sharedpreferences;
     EditText etAmount;
-    static String name = null;
-    static int amount = 0;                         //TODO: currently, only integers are accepted....MODIFICATION NEEDED
+    String name = null;
+    int amount = 0;                         //TODO: currently, only integers are accepted....MODIFICATION NEEDED
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,8 +45,9 @@ public class MainActivity extends AppCompatActivity {
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
 
-        listView = (ListView) findViewById(R.id.listView);
-        final CustomAdapter customAdapter = new CustomAdapter(getApplicationContext());
+//        listView = (ListView) findViewById(R.id.listView);
+//        CustomAdapter customAdapter = new CustomAdapter(getApplicationContext());
+//        listView.setAdapter(customAdapter);
 
         sharedpreferences = getSharedPreferences("sharedprefs", Context.MODE_PRIVATE);
         //sharedpreferences = PreferenceManager.getDefaultSharedPreferences(this);
@@ -78,9 +79,8 @@ public class MainActivity extends AppCompatActivity {
                         //TODO: Auto-complete of name feature has to be added
 
                         if (sharedpreferences.contains(name)) {
-                            amount = amount + sharedpreferences.getInt(name, 0);
-                            editor.putString(no_of_persons + "", name);
-                            editor.putInt(name, amount);
+//                            editor.putString(name, name);
+                            editor.putInt(name + amount, amount + sharedpreferences.getInt(name, 0));
                             editor.apply();
 
                             //getSharedPreferences("sharedprefs", Context.MODE_PRIVATE).edit().putInt(name, amount + Integer.parseInt(sharedpreferences.getString(name, ""))).apply();
@@ -91,14 +91,15 @@ public class MainActivity extends AppCompatActivity {
                             amountsArrayList.add(indexToBeModified, amount);*/
                         }
                         else{
-                            editor.putString(no_of_persons + "", name);
-                            editor.putInt(name, amount);
+                            no_of_persons++;
+
+                            editor.putString(name, name);
+                            editor.putInt(name + amount, amount);
                             editor.commit();
                             /*namesArrayList.add(index + 1, name);
                             amountsArrayList.add(index, amount);*/            //because index is static
 
-                            no_of_persons++;
-                            listView.setAdapter(customAdapter);
+//                            listView.setAdapter(customAdapter);
                         }
 
 //                        EditTextPreference myPrefText = (EditTextPreference) super.findPreference(name);
